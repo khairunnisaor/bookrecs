@@ -9,7 +9,7 @@ Penyelesaian proyek sistem rekomendasi buku berbasis content-based filtering ini
 
 Untuk mendukung proyek ini, riset dan referensi terkait mencakup dasar-dasar sistem rekomendasi seperti yang dibahas dalam Ricci et al., Recommender Systems Handbook (2011) yang menjelaskan berbagai pendekatan termasuk content-based filtering. Studi oleh Mathew et al., 2024 secara spesifik mengulas implementasi sistem rekomendasi buku berbasis konten, seringkali memanfaatkan teknik seperti TF-IDF untuk ekstraksi fitur dari teks dan Cosine Similarity untuk mengukur kemiripan antar buku. Dataset umum seperti Goodreads Dataset juga menjadi sumber daya penting dalam pengembangan dan pengujian sistem semacam ini.
 
-P. Mathew, B. Kuriakose and V. Hegde, "Book Recommendation System through content based and collaborative filtering method," 2016 International Conference on Data Mining and Advanced Computing (SAPIENCE), Ernakulam, India, 2016, pp. 47-52, doi: 10.1109/SAPIENCE.2016.7684166.
+Referensi: P. Mathew, B. Kuriakose and V. Hegde, "Book Recommendation System through content based and collaborative filtering method," 2016 International Conference on Data Mining and Advanced Computing (SAPIENCE), Ernakulam, India, 2016, pp. 47-52.
 
 ## Business Understanding
 
