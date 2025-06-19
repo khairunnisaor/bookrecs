@@ -24,14 +24,108 @@ Referensi: P. Mathew, B. Kuriakose and V. Hegde, "Book Recommendation System thr
 
 
 ## Data Understanding
-Paragraf awal bagian ini menjelaskan informasi mengenai jumlah data, kondisi data, dan informasi mengenai data yang digunakan. Sertakan juga sumber atau tautan untuk mengunduh dataset. Contoh: [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Restaurant+%26+consumer+data).
+Dataset ini menyediakan informasi lengkap tentang berbagai buku dan karakteristik fundamental setiap buku, mulai dari penulis, penerbit, isi ringkasnya, hingga kategori tematik dan waktu penerbitannya. Data ini sangat serbaguna dan dapat digunakan untuk berbagai keperluan. Data ini ideal untuk membangun sistem rekomendasi buku, di mana informasi konten dapat dianalisis untuk menyarankan judul yang relevan kepada pembaca berdasarkan preferensi mereka. Selain itu, dataset ini dapat dimanfaatkan untuk analisis tren literatur, seperti mengidentifikasi genre yang populer pada periode tertentu, tren penulis, atau pola penerbitan. Kemungkinan lain termasuk pengembangan alat pencarian buku yang lebih advance, klasifikasi buku, atau bahkan riset pasar untuk industri penerbitan.
 
-Selanjutnya, uraikanlah seluruh variabel atau fitur pada data. Sebagai contoh:  
+Dataset ini dikumpulkan dari dua dataset, yaitu [Book Recommendation Dataset](https://www.kaggle.com/datasets/athu1105/book-genre-prediction) dan [Book Genre Prediction](https://www.kaggle.com/datasets/arashnic/book-recommendation-dataset). Kedua dataset tersebut digabungkan untuk mendapatkan informasi yang lebih lengkap, yang mana masing-masing terdiri dari 271.360 dan 4.657 baris.
 
-Variabel-variabel pada Restaurant UCI dataset adalah sebagai berikut:
-- accepts : merupakan jenis pembayaran yang diterima pada restoran tertentu.
-- cuisine : merupakan jenis masakan yang disajikan pada restoran.
-- dst
+Sumber Dataset:
+* [Book Recommendation Dataset](https://www.kaggle.com/datasets/athu1105/book-genre-prediction)
+* [Book Genre Prediction](https://www.kaggle.com/datasets/arashnic/book-recommendation-dataset)
+
+### Variabel-variabel pada kedua dataset tersebut:
+Book Recommendation Dataset
+* ISBN: Kode unik buku
+* Book Title: Judul buku
+* Book Author: Nama penulis buku
+* Publication Year: Tahun buku diterbitkan
+* Publisher: Penerbit
+
+Book Genre Prediction
+* ID
+* Title: Judul buku
+* Genre: Genre cerita/isi dari buku
+* Summary: Rangkuman singkat tentang buku tersebut
+
+Dalam menggabungkan kedua dataset, digunakan judul buku sebagai primary dan foreign key satu sama lain, karena dataset Book Genre tidak memiliki kolom ISBN. Hal ini dilakukan dengan cara sebagai berikut:
+```python
+book_all = pd.merge(book[['booktitle', 'bookauthor', 'publisher', 'publicationyear']], book_genre[['title', 'genre', 'summary']],  left_on='booktitle', right_on='title', how='inner')
+book_all = book_all.drop(columns='title')
+```
+Karena dataset Book Genre jauh lebih sedikit dari Book Recommendation, jumlah baris pada data berkurang mengikuti jumlah baris dari dataset Book Genre.
+
+### Pengecekan Kondisi Dataset
+Pada tahap ini dilakukan pemahaman tentang kelengkapan dataset secara umum. Hal ini dilakukan dengan:
+```python
+book_all.info()
+```
+Output:
+```
+RangeIndex: 4898 entries, 0 to 4897
+Data columns (total 6 columns):
+ #   Column           Non-Null Count  Dtype 
+---  ------           --------------  ----- 
+ 0   booktitle        4898 non-null   object
+ 1   bookauthor       4898 non-null   object
+ 2   publisher        4898 non-null   object
+ 3   publicationyear  4898 non-null   object
+ 4   genre            4898 non-null   object
+ 5   summary          4898 non-null   object
+dtypes: object(6)
+memory usage: 229.7+ KB
+```
+Hasil gabungan kedua dataset terdiri dari 6 kolom: Book Title, Book Author, Publisher, Publication Year, Genre, dan Summary dengan total 4.898 baris. Seluruh kolom bertipe string, dimana butuh dilakukan perubahan tipe data dari string ke integer untuk variabel Publication Year.
+
+1. Pengecekan Nilai yang Hilang (missing values)
+```python
+# Cek missing value dengan fungsi isnull()
+book_all.isnull().sum()
+```
+Tidak terdapat kolom yang memiliki missing values
+
+2. Pengecekan Data Duplikat
+```python
+duplicates = book_all.duplicated(subset=['booktitle', 'bookauthor'])
+
+print("Baris duplikat:")
+print(book_all[duplicates])
+```
+Output:
+```
+Baris duplikat:
+[2317 rows x 6 columns]
+```
+Diketahui bahwa terdapat 2.317 baris yang terduplikat. Hal ini akan ditangani lebih lanjut pada tahap Data Preparation.
+
+
+3. Pengecekan Outlier
+```python
+def outlier_check(df, col):
+    Q1 = df[col].quantile(0.25)
+    Q3 = df[col].quantile(0.75)
+    IQR = Q3 - Q1
+
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+
+    outliers_iqr = df[(df[col] < lower_bound) | (df[col] > upper_bound)]
+    print(f"{col}: {len(outliers_iqr)}")
+
+numeric_features = book_all[book_all.columns].select_dtypes(include=['number']).columns
+
+print("Jumlah outlier yang ditemukan pada setiap kolom:")
+for col in book_all[numeric_features]:
+    outlier_check(book_all, col)
+```
+Output:
+```
+Jumlah outlier yang ditemukan pada setiap kolom:
+publicationyear: 69
+```
+Dari hasil pengecekan outlier, terdapat 69 baris dari kolom `publicationyear` yang dikategorikan sebagai outlier. Namun, hal ini wajar berdasarkan visualisasi pada tahap EDA, karena memang banyak buku yang diterbitkan sejak awal tahun 1900.
+
+### Exploratory Data Analysis
+
+
 
 **Rubrik/Kriteria Tambahan (Opsional)**:
 - Melakukan beberapa tahapan yang diperlukan untuk memahami data, contohnya teknik visualisasi data beserta insight atau exploratory data analysis.
