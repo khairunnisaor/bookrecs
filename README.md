@@ -175,7 +175,7 @@ viz_data(book_all['genre'], 'Book per Genre', 'Genre', 'Number of Books')
 Output:
 ![by_genre](https://github.com/user-attachments/assets/fc827b2a-45e4-4df2-88b3-771a24f7082d)
 
-Sedangkan dari segi genre, Thriller dan Horor mendominasi, yang kemudian diikuti oleh Crime, Fantasy, History, dan Science.
+Sedangkan dari segi genre, Thriller dan Horor mendominasi, yang kemudian diikuti oleh Crime, Fantasy, History, dan Science Fiction.
 
 4. Pengecekan data
 ```python
@@ -326,17 +326,21 @@ Output:
 |	Harry Potter and the Philosopher's Stone	| J.K. Rowling	| fantasy |
 |	Hyperion	| DAN SIMMONS |	science |
 
-Secara intuitif, rekomendasi yang diberikan mayoritas relevan. 4 buku pertama merupakan sequel dari Harry Potter yang juga ditulis oleh J. K. Rowling dengan genre fantasy. Namun, pada hasil ke-5, model mengeluarkan Hyperion karya DAN Simmons dengan genre science fiction.
+Secara intuitif, rekomendasi yang diberikan mayoritas relevan. 4 buku pertama merupakan sequel dari Harry Potter yang juga ditulis oleh J. K. Rowling dengan genre fantasy. Namun, pada hasil ke-5, model mengeluarkan Hyperion karya DAN Simmons. Jika dibandingkan dengan Quiddicth Through the Ages, buku ini tidak relevan, karena merupakan buku bergenre science fiction.
 
-
----------------
-Tahapan ini membahas mengenai model sisten rekomendasi yang Anda buat untuk menyelesaikan permasalahan. Sajikan top-N recommendation sebagai output.
-
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menyajikan dua solusi rekomendasi dengan algoritma yang berbeda.
-- Menjelaskan kelebihan dan kekurangan dari solusi/pendekatan yang dipilih.
 
 ## Evaluation
+
+
+### Metrik Evaluasi
+Dalam mengevaluasi sistem rekomendasi content-based filtering, terutama yang merekomendasikan berdasarkan kesamaan fitur konten seperti genre, penulis, dan rangkuman, presisi adalah metrik kunci yang digunakan. Presisi mengukur seberapa banyak rekomendasi yang diberikan benar-benar relevan bagi pengguna.
+
+Rumus untuk menghitung presisi sistem rekomendasi adalah:
+<ul><ul>$$P = Jumlah_rekomendasi_yang_relevan / Jumlah_total_rekomendasi_yang diberikan$$</ul></ul>
+
+
+
+
 Pada bagian ini Anda perlu menyebutkan metrik evaluasi yang digunakan. Kemudian, jelaskan hasil proyek berdasarkan metrik evaluasi tersebut.
 
 Ingatlah, metrik evaluasi yang digunakan harus sesuai dengan konteks data, problem statement, dan solusi yang diinginkan.
