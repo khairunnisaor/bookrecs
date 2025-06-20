@@ -309,9 +309,24 @@ cbf_data[cbf_data.booktitle.eq('Quidditch Through the Ages')]
 ```
 Output:
 | Book Title	| Book Author	| Publisher	| Publication Year	| Genre |	Summary	| Combined Features |
-|Quidditch Through the Ages	| j k rowling |	sagebrush education resources |	2001 |	fantasy | the most checkedout book in the hogwarts libra... |	fantasy j k rowling the most checkedout book i... |
+| ---------- | ----------- | --------- | ---------------- | ----- | ------- | ----------------- |
+| Quidditch Through the Ages	| j k rowling |	sagebrush education resources |	2001 |	fantasy | the most checkedout book in the hogwarts libra... |	fantasy j k rowling the most checkedout book i... |
 
 2. Menampilkan Rekomendasi Top-5
+<br>Rekomendasi yang diberikan model untuk buku Quidditch Through the Ages
+```python
+book_recommendations('Quidditch Through the Ages')
+```
+Output:
+| Book Title |	Book Author |	Genre |
+| ---------- | ----------- | ----- |
+|	Fantastic Beasts and Where to Find Them	| J. K. Rowling |	fantasy |
+|	Harry Potter and the Goblet of Fire	| J. K. Rowling |	fantasy |
+|	Harry Potter and the Chamber of Secrets |	J. K. Rowling	| fantasy |
+|	Harry Potter and the Philosopher's Stone	| J.K. Rowling	| fantasy |
+|	Hyperion	| DAN SIMMONS |	science |
+
+Secara intuitif, rekomendasi yang diberikan mayoritas relevan. 4 buku pertama merupakan sequel dari Harry Potter yang juga ditulis oleh J. K. Rowling dengan genre fantasy. Namun, pada hasil ke-5, model mengeluarkan Hyperion karya DAN Simmons dengan genre science fiction.
 
 
 ---------------
