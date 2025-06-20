@@ -16,6 +16,7 @@ Referensi: P. Mathew, B. Kuriakose and V. Hegde, "Book Recommendation System thr
 ### Problem Statements
 1. Bagaimana cara menghadapi masalah *information overload* dalam menentukan atau mencari buku yang mungkin cocok dengan selera pembaca?
 2. Sistem seperti apa yang dapat diimplementasikan untuk mengefisiensi pencarian buku yang biasanya dilakukan secara manual dengan membaca sinopsis?
+3. Atribut seperti apa yang krusial dalam menggambarkan kemiripan antar buku?
 
 ### Goals
 1. Merancang sebuah sistem yang efisien, efektif, dan dapat memberikan saran kepada pembaca berdasarkan informasi yang terkandung di dalam masing-masing buku sehingga dapat mengurangi waktu dan upaya yang diperlukan dalam proses pencarian manual.
@@ -330,29 +331,19 @@ Secara intuitif, rekomendasi yang diberikan mayoritas relevan. 4 buku pertama me
 
 
 ## Evaluation
-
+Pada tahap ini dilakukan evaluasi model yang telah dibuat, untuk mengetahui seberapa relevan dan efektif model tersebut. Tahap ini bertujuan untuk memastikan sistem berhasil menyarankan item yang benar-benar cocok dengan minat atau kebutuhan pengguna.
 
 ### Metrik Evaluasi
 Dalam mengevaluasi sistem rekomendasi content-based filtering, terutama yang merekomendasikan berdasarkan kesamaan fitur konten seperti genre, penulis, dan rangkuman, presisi adalah metrik kunci yang digunakan. Presisi mengukur seberapa banyak rekomendasi yang diberikan benar-benar relevan bagi pengguna.
 
 Rumus untuk menghitung presisi sistem rekomendasi adalah:
-<ul><ul>`P = Jumlah rekomendasi yang relevan / Jumlah total rekomendasi yang diberikan`</ul></ul>
+<ul><ul>$$P = \text{Jumlah rekomendasi yang relevan} / \text{Jumlah total rekomendasi yang diberikan}$$</ul></ul>
+
+Dari 5 buku yang direkomendasikan, hanya 4 buku yang relevan. Sehingga dalam hal ini, precission model ini adalah 80%.
 
 
-
-
-Pada bagian ini Anda perlu menyebutkan metrik evaluasi yang digunakan. Kemudian, jelaskan hasil proyek berdasarkan metrik evaluasi tersebut.
-
-Ingatlah, metrik evaluasi yang digunakan harus sesuai dengan konteks data, problem statement, dan solusi yang diinginkan.
 
 ### Kesimpulan
-Kelebihan Informasi Buku: Pengguna menghadapi kesulitan signifikan dalam menemukan buku yang sesuai dengan minat dan preferensi mereka di tengah jutaan judul yang tersedia di berbagai platform, menyebabkan beban informasi berlebih (information overload).
-Pencarian Manual yang Tidak Efisien: Proses pencarian buku secara manual oleh pengguna seringkali memakan waktu, tidak efisien, dan cenderung tidak menghasilkan rekomendasi yang relevan atau personal.
-Potensi Minat Terlewat: Pembaca mungkin melewatkan buku-buku relevan yang sangat sesuai dengan selera mereka karena kurangnya sistem yang efektif untuk mempersonalisasi rekomendasi.
+Dalam menghadapi masalah *information overload* untuk mencari buku yang mirip dengan selera pembaca, proyek ini telah berhasil membangun sebuah sistem rekomendasi buku yang efisien berdasarkan kemiripan buku satu dengan yang lainnya. Sistem rekomendasi yang dibuat menggunakan metode Content-Based Filtering dengan TF-IDF vectorizer berhasil memberikan 5 buku yang secara general paling mirip dengan buku yang dijadikan acuan. Karena perhitungan kemiripannya menggunakan TF-IDF dan cosine similarity, kemiripan antar teks sangat berpengaruh. Oleh karena itu, pemilihan genre, penulis, dan rangkuman sebagai fitur adalah yang paling sesuai, karena variabel lain seperti penerbit dan tahun terbit kurang relevan untuk menggambarkan kemiripan buku satu sama lain. 
 
-
-**---Ini adalah bagian akhir laporan---**
-
-_Catatan:_
-- _Anda dapat menambahkan gambar, kode, atau tabel ke dalam laporan jika diperlukan. Temukan caranya pada contoh dokumen markdown di situs editor [Dillinger](https://dillinger.io/), [Github Guides: Mastering markdown](https://guides.github.com/features/mastering-markdown/), atau sumber lain di internet. Semangat!_
-- Jika terdapat penjelasan yang harus menyertakan code snippet, tuliskan dengan sewajarnya. Tidak perlu menuliskan keseluruhan kode project, cukup bagian yang ingin dijelaskan saja.
+Pembaca mungkin melewatkan buku-buku relevan yang sangat sesuai dengan selera mereka karena kurangnya sistem yang efektif untuk mempersonalisasi rekomendasi. Dengan adanya model yang memiliki informasi tentang berbagai buku dalam database, pengguna dapat mengetahui buku-buku baru yang sebelumnya tidak ada dalam radar mereka. Harapannya, sistem ini dapat mempersingkat proses pencarian buku secara manual oleh pengguna dan memberikan rekomendasi yang relevan dan personal. 
