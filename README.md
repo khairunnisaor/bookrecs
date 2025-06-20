@@ -291,8 +291,27 @@ tfidf_matrix = tf.fit_transform(cbf_data['combined_features'])
 
 <ul><ul>$$Similarity(A,B) = cos(θ) = A⋅B / ∣∣A∣∣⋅∣∣B∣∣$$</ul></ul>
 
-Perhitungan ini memungkinkan sistem untuk secara efektif mengidentifikasi dan merekomendasikan buku yang kontennya paling sesuai dengan minat pengguna.
+<ul>Perhitungan ini memungkinkan sistem untuk secara efektif mengidentifikasi dan merekomendasikan buku yang kontennya paling sesuai dengan minat pengguna.</ul>
 
+Dalam prakteknya, perhitungan tersebut dilakukan sebagai berikut:
+```python
+cosine_sim = cosine_similarity(tfidf_matrix)
+```
+Maka, telah didapatkan matrix dengan nilai *cosine similarity* untuk satu buku dengan buku lainnya berdasarkan genre, nama penulis, dan rangkumannya.
+
+
+### Rekomendasi Top-N
+Setelah berhasil membangun model dengan similariy antar item, selanjutnya dilakukan pengujian untuk model dapat memberikan informasi yang sesuai.
+1. Menampilkan buku yang dijadikan referensi
+<br>Pada tahap ini kita dapat mencari terlebih dulu apakah buku yang ingin kita jadikan acuan ada di dalam database.
+```python
+cbf_data[cbf_data.booktitle.eq('Quidditch Through the Ages')]
+```
+Output:
+| Book Title	| Book Author	| Publisher	| Publication Year	| Genre |	Summary	| Combined Features |
+|Quidditch Through the Ages	| j k rowling |	sagebrush education resources |	2001 |	fantasy | the most checkedout book in the hogwarts libra... |	fantasy j k rowling the most checkedout book i... |
+
+2. Menampilkan Rekomendasi Top-5
 
 
 ---------------
