@@ -92,9 +92,9 @@ print(book_all[duplicates])
 Output:
 ```
 Baris duplikat:
-[2317 rows x 6 columns]
+[2482 rows x 6 columns]
 ```
-Diketahui bahwa terdapat 2.317 baris yang terduplikat. Hal ini akan ditangani lebih lanjut pada tahap Data Preparation.
+Diketahui bahwa terdapat 2.482 baris yang terduplikat. Hal ini akan ditangani lebih lanjut pada tahap Data Preparation.
 
 
 3. Pengecekan Outlier
@@ -124,20 +124,174 @@ publicationyear: 69
 Dari hasil pengecekan outlier, terdapat 69 baris dari kolom `publicationyear` yang dikategorikan sebagai outlier. Namun, hal ini wajar berdasarkan visualisasi pada tahap EDA, karena memang banyak buku yang diterbitkan sejak awal tahun 1900.
 
 ### Exploratory Data Analysis
+Untuk mengetahui karakteristik dan distribusi data, dilakukan eksplorasi sebagai berikut:
+
+1. Menampilkan jumlah jenis Buku, Penulis, dan Penerbit
+```python
+print('Banyak Buku: ', len(book_all.booktitle.unique()))
+print('Banyak Penulis: ', len(book_all.bookauthor.unique()))
+print('Banyak Penerbit: ', len(book_all.publisher.unique()))
+```
+Output:
+```
+Banyak Buku:  1656
+Banyak Penulis:  1547
+Banyak Penerbit:  716
+```
+Walaupun terdapat 4.898 baris pada dataset ini, hanya ada 1.656 judul buku, 1.547 penulis, dan 716 penerbit yang terlibat.
+
+2. Visualisasi jumlah buku berdasarkan tahun penerbitan
+<br>Membuat fungsi untuk menampilkan barchar berdasarkan suatu kolom pada dataset
+```python
+def viz_data(df_col, chart_title, x_label, y_label):
+    # Hitung jumlah item per per kolom
+    item_per_col = df_col.value_counts().sort_index()
+
+    # Membuat plot
+    plt.figure(figsize=(10, 4))
+    sns.barplot(x=item_per_col.index, y=item_per_col.values, palette='viridis')
+    plt.title(chart_title, fontsize=16)
+    plt.xlabel(x_label, fontsize=12)
+    plt.ylabel(y_label, fontsize=12)
+    plt.xticks(rotation=45, ha='right') # Rotasi label tahun agar tidak tumpang tindih
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.tight_layout()
+    plt.show() # Tampilkan plot
+```
+Karena `publicationyear` bertipe data string, dilakukan perubahan tipe data menjadi integer. Kemudian dilakukan visualisasi dengan diagram batang untuk melihat distribusi data terhadap tahun penerbitan.
+```python
+book_all['publicationyear'] = book_all['publicationyear'].astype(int)
+viz_data(book_all['publicationyear'], 'Book per Year', 'Publication Year', 'Number of Books')
+```
+Output:
+![by_year](https://github.com/user-attachments/assets/2be928cc-3825-40f6-b6a3-15f2dda8cd83)
+
+Dari visualisasi di atas, dapat dilihat bahwa kebanyakan buku pada dataset ini terbit setelah tahun 1980.
+
+3. Visualisasi jumlah buku berdasarkan jenis Genre
+```python
+viz_data(book_all['genre'], 'Book per Genre', 'Genre', 'Number of Books')
+```
+Output:
+![by_genre](https://github.com/user-attachments/assets/fc827b2a-45e4-4df2-88b3-771a24f7082d)
+
+Sedangkan dari segi genre, Thriller dan Horor mendominasi, yang kemudian diikuti oleh Crime, Fantasy, History, dan Science.
+
+4. Pengecekan data
+```python
+book_all.head()
+```
+Langkah terakhir pada step ini, ditampilkan 5 baris teratas dari dataset.
+| Book Title        | Book Author | Publisher | Publication Year | Genre | Summary |
+| ----------------- | ----------- | --------- | ---------------- | ----- | ------- |
+| Jane Doe          |	R. J. Kaiser | Mira Books |	1999 |	thriller |	A double life with a single purpose: revenge... |
+|	The Testament     |	John Grisham |	Dell |	1999 |	thriller |	Troy Phelan, an eccentric elderly billionaire... |
+|	The Testament     |	John Grisham |	Dell |	1999 |	thriller |	The book is about Braverman Shaw, whose fathe... |
+|	The Testament     |	John Grisham |	Dell |	1999 |	thriller |	In a plush Virginia office, a rich, angry old ... |
+|	Seabiscuit: An American Legend	| LAURA HILLENBRAND |	Ballantine Books	| 2002	| sports |	There's an alternate cover edition here... |
+
+Tabel di atas menunjukkan 5 baris teratas dataset. Namun, dapat dilihat bahwa terdapat salah satu baris yang memiliki booktitle, bookauthor, publisher, publication year, dan genre yang sama, namun summary yang berbeda. Berdasarkan hal ini, saya akan hanya menyimpan baris pertama dari data yang redundan seperti contoh di atas. Hal ini akan dilakukan pada tahap Data Preparation.
 
 
-
-**Rubrik/Kriteria Tambahan (Opsional)**:
-- Melakukan beberapa tahapan yang diperlukan untuk memahami data, contohnya teknik visualisasi data beserta insight atau exploratory data analysis.
 
 ## Data Preparation
-Pada bagian ini Anda menerapkan dan menyebutkan teknik data preparation yang dilakukan. Teknik yang digunakan pada notebook dan laporan harus berurutan.
+Setelah memahami data yang akan digunakan untuk melatih model content-based filtering, selanjutnya adalah data preparation. Pada tahap ini dilakukan penanganan nilai yang hilang (jika ada), penghapusan data yang terduplikat, dan pembersihan data. Setelah penanganan untuk menghasilkan data yang bersih dan siap digunakan ini selesai, dilanjutkan dengan tahap penggabungan fitur sesuai kebutuhan analisis. Beberapa tahapan yang dilakukan yaitu:
 
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan proses data preparation yang dilakukan
-- Menjelaskan alasan mengapa diperlukan tahapan data preparation tersebut.
+1. Penanganan Data Duplikat
+<br>Penanganan data duplikat dilakukan berdasarkan nilai `booktitle` dan `bookauthor`. Kemunculan pertama akan disimpan dan kemunculan berikutnya dihapus.
+```python
+book_all = book_all.drop_duplicates(subset=['booktitle', 'bookauthor'], keep='first', inplace=False)
+book_all.shape
+```
+Output:
+```
+(2416, 6)
+```
+Setelah penanganan, terdapat sisa 2.416 baris setelah data yang redundan dihapus.
 
-## Modeling
+2. Data Cleaning
+<br>Untuk membersihkan fitur teks dari dataset, dilakukan data cleaning dan penghapusan simbol dengan cara sebagai berikut
+```python
+def clean_text(df_column):
+    df_column_clean = df_column.str.lower()\
+                      .str.replace(r'[^a-zA-Z0-9\s]', '', regex=True)\
+                      .str.replace(r'\s+', ' ', regex=True)\
+                      .str.strip()
+    return df_column_clean
+
+def after_cleaning_cnt(col_name, df_before, df_after):
+    print(f"before cleaning {col_name}: {len(df_before[col_name].unique())}")
+    print(f"after cleaning {col_name}: {len(df_after[col_name].unique())}\n")
+```
+Data cleaning dilakukan pada variabel `genre`, `bookauthor`, `publisher`, dan `summary`.
+
+Contoh data cleaning pada satu kolom:
+```
+cbf_data['bookauthor'] = clean_text(book_all['bookauthor'])
+after_cleaning_cnt('bookauthor', book_all, cbf_data)
+```
+Output:
+```
+before cleaning genre: 10
+after cleaning genre: 10
+
+before cleaning bookauthor: 1547
+after cleaning bookauthor: 1466
+
+before cleaning publisher: 532
+after cleaning publisher: 526
+
+before cleaning summary: 1656
+after cleaning summary: 1656
+```
+Dapat dilihat bahwa tidak ada yang berkurang dari variabel genre dan summary, tapi terdapat penurunan jumlah bookauthor dan publisher unik.
+
+
+3. Combine Features
+<br>Pada tahap ini, dilakukan pemilihan fitur yang akan digunakan sebagai descriptor yang menggambarkan masing-masing buku. Pada studi kasus ini, dipilih genre buku, nama penulis, dan ringkasan buku sebagai fitur. Ketiga fitur ini kemudian dikombinasikan ke dalam satu kolom.
+```python
+cbf_data['combined_features'] = cbf_data['genre'] + ' ' + cbf_data['bookauthor'] + ' ' + cbf_data['summary']
+cbf_data
+```
+Contoh hasil penggabungan fitur:
+| Book Title        | Book Author | Publisher | Publication Year | Genre | Summary | Combined Features |
+| ----------------- | ----------- | --------- | ---------------- | ----- | ------- | ----------------- |
+| Jane Doe          |	R. J. Kaiser | Mira Books |	1999 |	thriller |	A double life with a single purpose: revenge... | thriller r j kaiser a double life with a singl... |
+|	The Testament     |	John Grisham |	Dell |	1999 |	thriller |	Troy Phelan, an eccentric elderly billionaire... | thriller john grisham troy phelan an eccentric... |
+|	The Testament     |	John Grisham |	Dell |	1999 |	thriller |	The book is about Braverman Shaw, whose fathe... | sports laura hillenbrand theres an alternate c... |
+
+Dapat dilihat bentuk data setelah penggabungan fitur ada pada kolom `combined_features`.
+
+
+
+## Modeling: Content-Based Filtering
+Content-Based Filtering merupakan metode sistem rekomendasi yang memberikan saran item kepada pengguna berdasarkan kesamaan atribut antara item dan preferensi pengguna di masa lalu. Sistem ini menganalisis profil "konten" dari item yang disukai pengguna (misalnya, genre, kata kunci, penulis dari buku yang pernah dibaca) dan kemudian menyarankan item baru yang memiliki karakteristik atau atribut serupa. Kelebihan utamanya adalah kemampuannya untuk merekomendasikan item yang belum pernah dilihat oleh banyak pengguna lain (masalah cold-start pada item), karena rekomendasi didasarkan pada analisis konten itu sendiri, bukan interaksi dari pengguna lain.
+
+Hal yang dilakukan dalam pembangunan model adalah:
+1. Ekstraksi fitur menggunakan TF-IDF
+<br>Melakukan ekstraksi fitur `combined_features` yang terdiri dari `genre`, `bookauthor`, dan `summary` menggunakan TF-IDF. Metode ekstraksi fitur ini mengubah data text menjadi vektor sehingga kemiripan antar item dapat dihitung dengan kalkukasi matematika.
+```python
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+# Inisialisasi TfidfVectorizer
+tf = TfidfVectorizer()
+
+# Melakukan perhitungan idf pada Combined Feature: Genre, Book Author, dan Summary
+tf.fit(cbf_data['combined_features'])
+
+# Mapping array dari fitur index integer ke fitur nama
+tf.get_feature_names_out()
+
+# Melakukan fit lalu ditransformasikan ke bentuk matrix
+tfidf_matrix = tf.fit_transform(cbf_data['combined_features'])
+```
+
+2. Perhitungan Cosine Similarity antar item
+
+
+
+
+---------------
 Tahapan ini membahas mengenai model sisten rekomendasi yang Anda buat untuk menyelesaikan permasalahan. Sajikan top-N recommendation sebagai output.
 
 **Rubrik/Kriteria Tambahan (Opsional)**: 
