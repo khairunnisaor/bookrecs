@@ -339,7 +339,7 @@ Dalam mengevaluasi sistem rekomendasi content-based filtering, terutama yang mer
 Rumus untuk menghitung presisi sistem rekomendasi adalah:
 <ul><ul>$$P = \text{Jumlah rekomendasi yang relevan} / \text{Jumlah total rekomendasi yang diberikan}$$</ul></ul>
 
-Dari 5 buku yang direkomendasikan, hanya 4 buku yang relevan. Sehingga dalam hal ini, precission model ini adalah 80%.
+Dari 5 buku yang direkomendasikan, hanya 4 buku yang relevan. Sehingga dalam proyek ini, precission-nya adalah 80%.
 
 
 
