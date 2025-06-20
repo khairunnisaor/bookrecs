@@ -258,7 +258,7 @@ Contoh hasil penggabungan fitur:
 | ----------------- | ----------- | --------- | ---------------- | ----- | ------- | ----------------- |
 | Jane Doe          |	R. J. Kaiser | Mira Books |	1999 |	thriller |	A double life with a single purpose: revenge... | thriller r j kaiser a double life with a singl... |
 |	The Testament     |	John Grisham |	Dell |	1999 |	thriller |	Troy Phelan, an eccentric elderly billionaire... | thriller john grisham troy phelan an eccentric... |
-|	The Testament     |	John Grisham |	Dell |	1999 |	thriller |	The book is about Braverman Shaw, whose fathe... | sports laura hillenbrand theres an alternate c... |
+|	Seabiscuit: An American Legend |	Laura Hillenbrand |	Ballantine Books	| 2002	| sports |	The book is about Braverman Shaw, whose fathe... | sports laura hillenbrand theres an alternate c... |
 
 Dapat dilihat bentuk data setelah penggabungan fitur ada pada kolom `combined_features`.
 
@@ -287,7 +287,11 @@ tfidf_matrix = tf.fit_transform(cbf_data['combined_features'])
 ```
 
 2. Perhitungan Cosine Similarity antar item
+<br>Cosine Similarity dalam metode Content-Based Filtering adalah metrik yang digunakan untuk mengukur kemiripan antara dua vektor dalam ruang multidimensional. Dalam konteks rekomendasi buku, vektor ini merepresentasikan profil sebuah buku (misalnya, berdasarkan sinopsis, genre, atau penulis). Nilai kemiripan dihitung dari cosinus sudut antara kedua vektor, dengan perhitungan sebagai berikut:
 
+<ul><ul>$$Similarity(A,B) = cos(θ) = A⋅B / ∣∣A∣∣⋅∣∣B∣∣$$</ul></ul>
+
+Perhitungan ini memungkinkan sistem untuk secara efektif mengidentifikasi dan merekomendasikan buku yang kontennya paling sesuai dengan minat pengguna.
 
 
 
