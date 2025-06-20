@@ -211,7 +211,7 @@ Output:
 Setelah penanganan, terdapat sisa 2.416 baris setelah data yang redundan dihapus.
 
 2. Data Cleaning
-<br>Untuk membersihkan fitur teks dari dataset, dilakukan data cleaning dan penghapusan simbol dengan cara sebagai berikut
+<br>Untuk membersihkan fitur teks dari dataset, dilakukan perubahan teks menjadi huruf kecil agar lebih seragam dan penghapusan simbol dengan cara sebagai berikut
 ```python
 def clean_text(df_column):
     df_column_clean = df_column.str.lower()\
