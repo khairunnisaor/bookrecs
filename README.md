@@ -336,7 +336,7 @@ Secara intuitif, rekomendasi yang diberikan mayoritas relevan. 4 buku pertama me
 Dalam mengevaluasi sistem rekomendasi content-based filtering, terutama yang merekomendasikan berdasarkan kesamaan fitur konten seperti genre, penulis, dan rangkuman, presisi adalah metrik kunci yang digunakan. Presisi mengukur seberapa banyak rekomendasi yang diberikan benar-benar relevan bagi pengguna.
 
 Rumus untuk menghitung presisi sistem rekomendasi adalah:
-<ul><ul>$$P = Jumlah_rekomendasi_yang_relevan / Jumlah_total_rekomendasi_yang diberikan$$</ul></ul>
+<ul><ul>`P = Jumlah rekomendasi yang relevan / Jumlah total rekomendasi yang diberikan`</ul></ul>
 
 
 
